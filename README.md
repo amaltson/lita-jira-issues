@@ -2,6 +2,8 @@
 
 [![Build
 Status](https://travis-ci.org/amaltson/lita-jira-issues.svg?branch=master)](https://travis-ci.org/amaltson/lita-jira-issues)
+[![Coverage
+Status](https://coveralls.io/repos/amaltson/lita-jira-issues/badge.png)](https://coveralls.io/r/amaltson/lita-jira-issues)
 
 TODO: Add a description of the plugin.
 
