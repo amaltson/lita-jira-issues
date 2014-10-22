@@ -11,10 +11,19 @@ module Lita
       }
 
       def jira_key(response)
+        unless configured?
+          raise 'Need to configure url, username, password for jira_issues ' \
+            'to work'
+        end
         response.matches.each do | key |
           response.reply "[#{key}]"
         end
       end
+
+      def configured?
+        config.url && config.username && config.password
+      end
+
     end
 
     Lita.register_handler(JiraIssues)
