@@ -16,12 +16,16 @@ module Lita
             'to work'
         end
         response.matches.each do | key |
-          response.reply "[#{key}]"
+          handle_key(response, key)
         end
       end
 
       def configured?
         config.url && config.username && config.password
+      end
+
+      def handle_key(response, key)
+        response.reply "[#{key}]"
       end
 
     end
