@@ -6,11 +6,11 @@ module Lita
         config.enabled = true
       end
 
-      route /[A-Z]+-\d+/, :jira_key, help: {
+      route /[A-Z]+-\d+/, :jira_message, help: {
         "KEY-123" => "Replies with information about the given JIRA key"
       }
 
-      def jira_key(response)
+      def jira_message(response)
         unless configured?
           raise 'Need to configure url, username, password for jira_issues ' \
             'to work'
