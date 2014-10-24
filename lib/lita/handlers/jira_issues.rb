@@ -33,7 +33,7 @@ module Lita
 
       def handle_key(response, key)
         data = @jira.data_for_issue(key)
-        response.reply "[#{data[:key]}]"
+        response.reply "[#{data[:key]}] #{data[:fields][:summary]}"
       end
     end
 
