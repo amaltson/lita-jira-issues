@@ -1,6 +1,13 @@
+require_relative 'jira_gateway'
+
 module Lita
   module Handlers
     class JiraIssues < Handler
+
+      def initialize(*args)
+        super(args)
+        @jira = JiraGateway.new(http, config)
+      end
 
       def self.default_config(config)
         config.enabled = true
@@ -25,9 +32,9 @@ module Lita
       end
 
       def handle_key(response, key)
-        response.reply "[#{key}]"
+        data = @jira.data_for_issue(key)
+        response.reply "[#{data[:key]}]"
       end
-
     end
 
     Lita.register_handler(JiraIssues)
