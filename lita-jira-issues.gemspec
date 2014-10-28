@@ -2,7 +2,7 @@ Gem::Specification.new do |spec|
   spec.name          = "lita-jira-issues"
   spec.version       = "0.1.0"
   spec.authors       = ["Arthur Maltson"]
-  spec.email         = ["arthur_maltson@otpp.com"]
+  spec.email         = ["arthur@maltson.com"]
   spec.description   = %q{TODO: Add a description}
   spec.summary       = %q{TODO: Add a summary}
   spec.homepage      = "TODO: Add a homepage"
