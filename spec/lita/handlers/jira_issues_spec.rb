@@ -19,6 +19,7 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
 
     it 'should reply with JIRA description if one seen' do
       allow_any_instance_of(JiraGateway).to receive(:data_for_issue)
+        .with('KEY-424')
         .and_return(
       {
         key:'KEY-424',
@@ -32,9 +33,14 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
 
     it 'it should reply with multiple JIRA descriptions if many seen' do
       allow_any_instance_of(JiraGateway).to receive(:data_for_issue)
+        .with('PROJ-9872')
         .and_return(
-      {key:'PROJ-9872', fields: { summary: 'Too many bugs'}},
+      {key:'PROJ-9872', fields: { summary: 'Too many bugs'}})
+      allow_any_instance_of(JiraGateway).to receive(:data_for_issue)
+        .with('NEW-1')
+        .and_return(
       {key:'NEW-1', fields: { summary: 'New 1'}})
+
       send_message('Some PROJ-9872 message NEW-1 more text')
       expect(replies.pop).to eq('[NEW-1] New 1')
       expect(replies.pop).to eq('[PROJ-9872] Too many bugs')
