@@ -21,22 +21,49 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
       mock_jira('KEY-424', {
         key:'KEY-424',
         fields: {
-          summary: 'Another issue'
+          summary: 'Another issue',
+          status: {
+            name: 'Fixed'
+          }
         }
       })
       send_message('Some message KEY-424 more text')
-      expect(replies.last).to eq('[KEY-424] Another issue')
+      expect(replies.last).to eq(<<-EOS.chomp
+[KEY-424] Another issue
+Status: Fixed
+                                 EOS
+                                )
     end
 
     it 'it should reply with multiple JIRA descriptions if many seen' do
       mock_jira('PROJ-9872',
-                {key:'PROJ-9872', fields: { summary: 'Too many bugs'}})
+                {key:'PROJ-9872',
+                 fields: {
+                  summary: 'Too many bugs',
+                  status: {
+                    name: 'Resolved'
+                  }
+                }})
       mock_jira('nEw-1',
-                {key:'NEW-1', fields: { summary: 'New 1'}})
+                {key:'NEW-1',
+                 fields: {
+                  summary: 'New 1',
+                  status: {
+                    name: 'Open'
+                  }
+                }})
 
       send_message('Some PROJ-9872 message nEw-1 more text')
-      expect(replies.pop).to eq('[NEW-1] New 1')
-      expect(replies.pop).to eq('[PROJ-9872] Too many bugs')
+      expect(replies.pop).to eq(<<-EOS.chomp
+[NEW-1] New 1
+Status: Open
+                                EOS
+                               )
+      expect(replies.pop).to eq(<<-EOS.chomp
+[PROJ-9872] Too many bugs
+Status: Resolved
+                                EOS
+                               )
     end
 
     def mock_jira(key, result)

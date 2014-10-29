@@ -34,8 +34,13 @@ module Lita
       def handle_key(response, key)
         data = @jira.data_for_issue(key)
         return if data.empty?
-        issue = "[#{data[:key]}] #{data[:fields][:summary]}"
+        issue = issue_details(data)
         response.reply issue
+      end
+
+      def issue_details(data)
+        issue = "[#{data[:key]}] #{data[:fields][:summary]}"
+        issue << "\nStatus: #{data[:fields][:status][:name]}"
       end
     end
 
