@@ -10,7 +10,8 @@ class JiraGateway
   def data_for_issue(key)
     http.basic_auth(config.username, config.password)
     response = http.get(config.url + '/rest/api/2/issue/' + key)
-    MultiJson.load(response.body, symbolize_keys: true)
+    return MultiJson.load(response.body, symbolize_keys: true) if response.success?
+    {}
   end
 
 end
