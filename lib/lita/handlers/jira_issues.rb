@@ -13,7 +13,7 @@ module Lita
         config.enabled = true
       end
 
-      route /[A-Z]+-\d+/, :jira_message, help: {
+      route /[a-zA-Z]+-\d+/, :jira_message, help: {
         "KEY-123" => "Replies with information about the given JIRA key"
       }
 

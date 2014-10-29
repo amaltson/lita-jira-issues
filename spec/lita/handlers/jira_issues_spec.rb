@@ -31,10 +31,10 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
     it 'it should reply with multiple JIRA descriptions if many seen' do
       mock_jira('PROJ-9872',
                 {key:'PROJ-9872', fields: { summary: 'Too many bugs'}})
-      mock_jira('NEW-1',
+      mock_jira('nEw-1',
                 {key:'NEW-1', fields: { summary: 'New 1'}})
 
-      send_message('Some PROJ-9872 message NEW-1 more text')
+      send_message('Some PROJ-9872 message nEw-1 more text')
       expect(replies.pop).to eq('[NEW-1] New 1')
       expect(replies.pop).to eq('[PROJ-9872] Too many bugs')
     end
