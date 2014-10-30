@@ -41,13 +41,21 @@ module Lita
       def issue_details(data)
         key = data[:key]
         data = data[:fields]
-        issue = "[#{key}] #{data[:summary]}"
-        issue << "\nStatus: #{data[:status][:name]}"
+        issue = summary(key, data)
+        issue << status(data)
         issue << assignee(data)
         issue << reporter(data)
         issue << fix_version(data)
         issue << priority(data)
         issue << issue_link(key)
+      end
+
+      def summary(key, data)
+        "[#{key}] #{data[:summary]}"
+      end
+
+      def status(data)
+        "\nStatus: #{data[:status][:name]}"
       end
 
       def assignee(data)
