@@ -1,5 +1,6 @@
 # lita-jira-issues
 
+[![Gem Version](http://img.shields.io/gem/v/lita-jira-issues.svg)](https://rubygems.org/gems/lita-jira-issues)
 [![Build Status](http://img.shields.io/travis/amaltson/lita-jira-issues.svg)](https://travis-ci.org/amaltson/lita-jira-issues)
 [![Code Climate](http://img.shields.io/codeclimate/github/amaltson/lita-jira-issues.svg)](https://codeclimate.com/github/amaltson/lita-jira-issues)
 [![Coverage Status](http://img.shields.io/coveralls/amaltson/lita-jira-issues.svg)](https://coveralls.io/r/amaltson/lita-jira-issues)
