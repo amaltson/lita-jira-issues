@@ -6,8 +6,8 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
     send_message('Trying to use JIRA_123 not configured')
   end
 
-  it { routes('JIRA-123').to(:jira_message) }
-  it { routes('user talking about something JIRA-123 had key').to(:jira_message) }
+  it { is_expected.to route('JIRA-123').to(:jira_message) }
+  it { is_expected.to route('user talking about something JIRA-123 had key').to(:jira_message) }
 
   describe 'Looking up keys' do
 

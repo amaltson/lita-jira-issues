@@ -9,6 +9,9 @@ Lita handler for showing JIRA issue details when a JIRA issue key is mentioned i
 chat. Inspired by the [Hubot jira-issue
 plugin](https://github.com/github/hubot-scripts/blob/master/src/scripts/jira-issues.coffee)
 
+**Note**: Version 0.2+ of this hander require Lita 4. If you'd like to use this
+handler with Lita 3.x, please use version 0.1
+
 ## Installation
 
 Add lita-jira-issues to your Lita instance's Gemfile:

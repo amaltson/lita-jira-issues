@@ -4,31 +4,19 @@ module Lita
   module Handlers
     class JiraIssues < Handler
 
-      def initialize(*args)
-        super(args)
-        @jira = JiraGateway.new(http, config)
-      end
-
-      def self.default_config(config)
-        config.enabled = true
-      end
+      config :url, required: true, type: String
+      config :username, required: true, type: String
+      config :password, required: true, type: String
 
       route /[a-zA-Z]+-\d+/, :jira_message, help: {
         "KEY-123" => "Replies with information about the given JIRA key"
       }
 
       def jira_message(response)
-        unless configured?
-          raise 'Need to configure url, username, password for jira_issues ' \
-            'to work'
-        end
+        @jira ||= JiraGateway.new(http, config)
         response.matches.each do | key |
           handle_key(response, key)
         end
-      end
-
-      def configured?
-        config.url && config.username && config.password
       end
 
       def handle_key(response, key)
