@@ -39,6 +39,7 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
       expect(replies.last).to eq(<<-EOS.chomp
 [KEY-424] Another issue
 Status: Fixed, assigned to User, rep. by Reporter, fixVersion: Sprint 2, priority: Undecided
+http://jira.local/browse/KEY-424
                                  EOS
                                 )
     end
@@ -74,11 +75,13 @@ Status: Fixed, assigned to User, rep. by Reporter, fixVersion: Sprint 2, priorit
       expect(replies.pop).to eq(<<-EOS.chomp
 [NEW-1] New 1
 Status: Open, unassigned, rep. by User2, fixVersion: NONE, priority: High
+http://jira.local/browse/NEW-1
                                 EOS
                                )
       expect(replies.pop).to eq(<<-EOS.chomp
 [PROJ-9872] Too many bugs
 Status: Resolved, unassigned, rep. by User, fixVersion: NONE
+http://jira.local/browse/PROJ-9872
                                 EOS
                                )
     end

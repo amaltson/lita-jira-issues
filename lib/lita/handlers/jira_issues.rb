@@ -39,12 +39,14 @@ module Lita
       end
 
       def issue_details(data)
-        issue = "[#{data[:key]}] #{data[:fields][:summary]}"
+        key = data[:key]
+        issue = "[#{key}] #{data[:fields][:summary]}"
         issue << "\nStatus: #{data[:fields][:status][:name]}"
         issue << assignee(data)
         issue << reporter(data)
         issue << fix_version(data)
         issue << priority(data)
+        issue << issue_link(key)
       end
 
       def assignee(data)
@@ -73,6 +75,10 @@ module Lita
         else
           ""
         end
+      end
+
+      def issue_link(key)
+        "\n#{config.url}/browse/#{key}"
       end
     end
 
