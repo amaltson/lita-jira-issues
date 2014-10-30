@@ -2,10 +2,6 @@ require "spec_helper"
 
 describe Lita::Handlers::JiraIssues, lita_handler: true do
 
-  it 'should fail to start without configuration' do
-    send_message('Trying to use JIRA_123 not configured')
-  end
-
   it { is_expected.to route('JIRA-123').to(:jira_message) }
   it { is_expected.to route('user talking about something JIRA-123 had key').to(:jira_message) }
 
