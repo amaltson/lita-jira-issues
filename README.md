@@ -1,6 +1,7 @@
 # lita-jira-issues
 
 [![Build Status](http://img.shields.io/travis/amaltson/lita-jira-issues.svg)](https://travis-ci.org/amaltson/lita-jira-issues)
+[![Code Climate](http://img.shields.io/codeclimate/github/amaltson/lita-jira-issues.svg)](https://codeclimate.com/github/amaltson/lita-jira-issues)
 [![Coverage Status](http://img.shields.io/coveralls/amaltson/lita-jira-issues.svg)](https://coveralls.io/r/amaltson/lita-jira-issues)
 
 Lita handler for showing JIRA issue details when a JIRA issue key is mentioned in
