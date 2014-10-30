@@ -40,8 +40,9 @@ module Lita
 
       def issue_details(data)
         key = data[:key]
-        issue = "[#{key}] #{data[:fields][:summary]}"
-        issue << "\nStatus: #{data[:fields][:status][:name]}"
+        data = data[:fields]
+        issue = "[#{key}] #{data[:summary]}"
+        issue << "\nStatus: #{data[:status][:name]}"
         issue << assignee(data)
         issue << reporter(data)
         issue << fix_version(data)
@@ -50,18 +51,18 @@ module Lita
       end
 
       def assignee(data)
-        if assigned_to = data[:fields][:assignee]
+        if assigned_to = data[:assignee]
           return ", assigned to #{assigned_to[:displayName]}"
         end
         ', unassigned'
       end
 
       def reporter(data)
-        ", rep. by #{data[:fields][:reporter][:displayName]}"
+        ", rep. by #{data[:reporter][:displayName]}"
       end
 
       def fix_version(data)
-        fix_versions = data[:fields][:fixVersions]
+        fix_versions = data[:fixVersions]
         if fix_versions and fix_versions.first
           ", fixVersion: #{fix_versions.first[:name]}"
         else
@@ -70,8 +71,8 @@ module Lita
       end
 
       def priority(data)
-        if data[:fields][:priority]
-          ", priority: #{data[:fields][:priority][:name]}" 
+        if data[:priority]
+          ", priority: #{data[:priority][:name]}" 
         else
           ""
         end
