@@ -30,13 +30,14 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
           },
           reporter: {
             displayName: 'Reporter'
-          }
+          },
+          fixVersions: [ { name: 'Sprint 2' } ]
         }
       })
       send_message('Some message KEY-424 more text')
       expect(replies.last).to eq(<<-EOS.chomp
 [KEY-424] Another issue
-Status: Fixed, assigned to User, rep. by Reporter
+Status: Fixed, assigned to User, rep. by Reporter, fixVersion: Sprint 2
                                  EOS
                                 )
     end
@@ -63,18 +64,19 @@ Status: Fixed, assigned to User, rep. by Reporter
                   },
                   reporter: {
                     displayName: 'User2'
-                  }
+                  },
+                  fixVersions: []
                 }})
 
       send_message('Some PROJ-9872 message nEw-1 more text')
       expect(replies.pop).to eq(<<-EOS.chomp
 [NEW-1] New 1
-Status: Open, unassigned, rep. by User2
+Status: Open, unassigned, rep. by User2, fixVersion: NONE
                                 EOS
                                )
       expect(replies.pop).to eq(<<-EOS.chomp
 [PROJ-9872] Too many bugs
-Status: Resolved, unassigned, rep. by User
+Status: Resolved, unassigned, rep. by User, fixVersion: NONE
                                 EOS
                                )
     end

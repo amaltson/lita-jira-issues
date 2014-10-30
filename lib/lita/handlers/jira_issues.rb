@@ -43,6 +43,7 @@ module Lita
         issue << "\nStatus: #{data[:fields][:status][:name]}"
         issue << assignee(data)
         issue << reporter(data)
+        issue << fix_version(data)
       end
 
       def assignee(data)
@@ -54,6 +55,15 @@ module Lita
 
       def reporter(data)
         ", rep. by #{data[:fields][:reporter][:displayName]}"
+      end
+
+      def fix_version(data)
+        fix_versions = data[:fields][:fixVersions]
+        if fix_versions and fix_versions.first
+          ", fixVersion: #{fix_versions.first[:name]}"
+        else
+          ', fixVersion: NONE'
+        end
       end
     end
 
