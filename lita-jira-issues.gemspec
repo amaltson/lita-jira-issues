@@ -3,8 +3,9 @@ Gem::Specification.new do |spec|
   spec.version       = "0.1.0"
   spec.authors       = ["Arthur Maltson"]
   spec.email         = ["arthur@maltson.com"]
-  spec.description   = "Show JIRA issue details in Lita"
-  spec.summary       = "Lita plugin for listing JIRA issue details when they are mentioned in chat."
+  spec.description   = "Lita handler to show JIRA issue details"
+  spec.summary       = %q{Lita handler that looks for JIRA issue keys and
+  helpfully inserts details into the chat conversation.}
   spec.homepage      = "https://github.com/amaltson/lita-jira-issues"
   spec.license       = "MIT"
   spec.metadata      = { "lita_plugin_type" => "handler" }
