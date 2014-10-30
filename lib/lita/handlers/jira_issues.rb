@@ -44,6 +44,7 @@ module Lita
         issue << assignee(data)
         issue << reporter(data)
         issue << fix_version(data)
+        issue << priority(data)
       end
 
       def assignee(data)
@@ -63,6 +64,14 @@ module Lita
           ", fixVersion: #{fix_versions.first[:name]}"
         else
           ', fixVersion: NONE'
+        end
+      end
+
+      def priority(data)
+        if data[:fields][:priority]
+          ", priority: #{data[:fields][:priority][:name]}" 
+        else
+          ""
         end
       end
     end
