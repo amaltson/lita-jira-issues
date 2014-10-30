@@ -41,6 +41,14 @@ module Lita
       def issue_details(data)
         issue = "[#{data[:key]}] #{data[:fields][:summary]}"
         issue << "\nStatus: #{data[:fields][:status][:name]}"
+        issue << assignee(data)
+      end
+
+      def assignee(data)
+        if assigned_to = data[:fields][:assignee]
+          return ", assigned to #{assigned_to[:displayName]}"
+        end
+        ', unassigned'
       end
     end
 

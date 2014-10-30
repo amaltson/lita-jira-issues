@@ -24,13 +24,16 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
           summary: 'Another issue',
           status: {
             name: 'Fixed'
+          },
+          assignee: {
+            displayName: 'User'
           }
         }
       })
       send_message('Some message KEY-424 more text')
       expect(replies.last).to eq(<<-EOS.chomp
 [KEY-424] Another issue
-Status: Fixed
+Status: Fixed, assigned to User
                                  EOS
                                 )
     end
@@ -42,7 +45,8 @@ Status: Fixed
                   summary: 'Too many bugs',
                   status: {
                     name: 'Resolved'
-                  }
+                  },
+                  assignee: nil
                 }})
       mock_jira('nEw-1',
                 {key:'NEW-1',
@@ -56,12 +60,12 @@ Status: Fixed
       send_message('Some PROJ-9872 message nEw-1 more text')
       expect(replies.pop).to eq(<<-EOS.chomp
 [NEW-1] New 1
-Status: Open
+Status: Open, unassigned
                                 EOS
                                )
       expect(replies.pop).to eq(<<-EOS.chomp
 [PROJ-9872] Too many bugs
-Status: Resolved
+Status: Resolved, unassigned
                                 EOS
                                )
     end
