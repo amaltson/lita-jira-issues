@@ -42,6 +42,7 @@ module Lita
         issue = "[#{data[:key]}] #{data[:fields][:summary]}"
         issue << "\nStatus: #{data[:fields][:status][:name]}"
         issue << assignee(data)
+        issue << reporter(data)
       end
 
       def assignee(data)
@@ -49,6 +50,10 @@ module Lita
           return ", assigned to #{assigned_to[:displayName]}"
         end
         ', unassigned'
+      end
+
+      def reporter(data)
+        ", rep. by #{data[:fields][:reporter][:displayName]}"
       end
     end
 
