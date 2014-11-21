@@ -57,6 +57,15 @@ http://jira.local/browse/PROJ-9872
                                )
     end
 
+    it 'it should reply once for each seen JIRA issue' do
+      mock_multiple_jiras
+      send_message(
+        'Some PROJ-9872 message nEw-1 more text with PROJ-9872 mentioned')
+      expect(replies.size).to eq(2)
+      expect(replies.pop).to include('[NEW-1] New 1')
+      expect(replies.pop).to include('[PROJ-9872] Too many bugs')
+    end
+
     def mock_jira(key, result)
       allow_any_instance_of(JiraGateway).to receive(:data_for_issue)
         .with(key)

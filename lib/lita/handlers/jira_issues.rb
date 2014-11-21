@@ -1,4 +1,5 @@
 require_relative 'jira_gateway'
+require 'set'
 
 module Lita
   module Handlers
@@ -14,7 +15,7 @@ module Lita
 
       def jira_message(response)
         @jira ||= JiraGateway.new(http, config)
-        response.matches.each do | key |
+        Set.new(response.matches).each do | key |
           handle_key(response, key)
         end
       end
