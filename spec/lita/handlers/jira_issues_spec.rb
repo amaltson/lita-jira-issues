@@ -41,6 +41,29 @@ http://jira.local/browse/KEY-424
     end
 
     it 'it should reply with multiple JIRA descriptions if many seen' do
+      mock_multiple_jiras
+      send_message('Some PROJ-9872 message nEw-1 more text')
+      expect(replies.pop).to eq(<<-EOS.chomp
+[NEW-1] New 1
+Status: Open, unassigned, rep. by User2, fixVersion: NONE, priority: High
+http://jira.local/browse/NEW-1
+                                EOS
+                               )
+      expect(replies.pop).to eq(<<-EOS.chomp
+[PROJ-9872] Too many bugs
+Status: Resolved, unassigned, rep. by User, fixVersion: NONE
+http://jira.local/browse/PROJ-9872
+                                EOS
+                               )
+    end
+
+    def mock_jira(key, result)
+      allow_any_instance_of(JiraGateway).to receive(:data_for_issue)
+        .with(key)
+        .and_return(result)
+    end
+
+    def mock_multiple_jiras
       mock_jira('PROJ-9872',
                 {key:'PROJ-9872',
                  fields: {
@@ -66,26 +89,6 @@ http://jira.local/browse/KEY-424
                   fixVersions: [],
                   priority: { name: 'High' }
                 }})
-
-      send_message('Some PROJ-9872 message nEw-1 more text')
-      expect(replies.pop).to eq(<<-EOS.chomp
-[NEW-1] New 1
-Status: Open, unassigned, rep. by User2, fixVersion: NONE, priority: High
-http://jira.local/browse/NEW-1
-                                EOS
-                               )
-      expect(replies.pop).to eq(<<-EOS.chomp
-[PROJ-9872] Too many bugs
-Status: Resolved, unassigned, rep. by User, fixVersion: NONE
-http://jira.local/browse/PROJ-9872
-                                EOS
-                               )
-    end
-
-    def mock_jira(key, result)
-      allow_any_instance_of(JiraGateway).to receive(:data_for_issue)
-        .with(key)
-        .and_return(result)
     end
 
   end
