@@ -8,12 +8,14 @@ module Lita
       config :url, required: true, type: String
       config :username, required: true, type: String
       config :password, required: true, type: String
+      config :ignore, default: [], type: Array
 
       route /[a-zA-Z]+-\d+/, :jira_message, help: {
         "KEY-123" => "Replies with information about the given JIRA key"
       }
 
       def jira_message(response)
+        return if config.ignore.include?(response.user.name)
         @jira ||= JiraGateway.new(http, config)
         Set.new(response.matches).each do | key |
           handle_key(response, key)
@@ -69,7 +71,7 @@ module Lita
 
       def priority(data)
         if data[:priority]
-          ", priority: #{data[:priority][:name]}" 
+          ", priority: #{data[:priority][:name]}"
         else
           ""
         end
