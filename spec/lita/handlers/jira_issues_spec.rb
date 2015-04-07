@@ -66,6 +66,36 @@ http://jira.local/browse/PROJ-9872
       expect(replies.pop).to include('[PROJ-9872] Too many bugs')
     end
 
+    it 'should handle ignoring users' do
+      Lita.config.handlers.jira_issues.ignore = ['Bob Smith']
+
+      mock_jira('KEY-424', {
+        key:'KEY-424',
+        fields: {
+          summary: 'Another issue',
+          status: {
+            name: 'Fixed'
+          },
+          assignee: {
+            displayName: 'User'
+          },
+          reporter: {
+            displayName: 'Reporter'
+          },
+          fixVersions: [ { name: 'Sprint 2' } ],
+          priority: { name: 'Undecided' }
+        }
+      })
+
+      bob = Lita::User.create(123, name: "Bob Smith")
+      fred = Lita::User.create(123, name: "Fred Smith")
+
+      send_message('Some message KEY-424 more text', as: bob)
+      expect(replies.last).not_to match('KEY-424')
+      send_message('Some message KEY-424 more text', as: fred)
+      expect(replies.last).to match('KEY-424')
+    end
+
     def mock_jira(key, result)
       allow_any_instance_of(JiraGateway).to receive(:data_for_issue)
         .with(key)
