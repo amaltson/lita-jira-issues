@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.2.2] - 2015-04-11
+### Added
+- A mechanism to ignore a list of users. Thanks to @jlambert121 for contributing.
+
 ## [0.2.1] - 2014-11-20
 ### Fixes
 - Display mentioned JIRA issue only once, not each time the issue is mentioned.
