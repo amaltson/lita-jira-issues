@@ -35,7 +35,7 @@ config.handlers.jira_issues.password = ENV['JIRA_PASSWORD'] || 'password'
 As in the example above, you can always use environment variables for sensitive
 information like the JIRA user's password.
 
-Optionally you can prevent Jira issue lookups from certain users using the ignore
+Optionally you can prevent JIRA issue lookups from certain users using the ignore
 configuration parameter
 
 ```ruby
