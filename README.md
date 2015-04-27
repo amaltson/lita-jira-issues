@@ -30,7 +30,7 @@ the following configurations to your `lita_config.rb`.
 config.handlers.jira_issues.url = 'http://jira.local'
 config.handlers.jira_issues.username = ENV['JIRA_USER'] || 'user'
 config.handlers.jira_issues.password = ENV['JIRA_PASSWORD'] || 'password'
-config.handlers.jira_issues.key_expiration = 120 #optional
+config.handlers.jira_issues.issue_ttl = 0 #optional
 ```
 
 As in the example above, you can always use environment variables for sensitive
@@ -43,7 +43,13 @@ configuration parameter
 config.handlers.jira_issues.ignore = [ 'Jira', 'Github' ]
 ```
 
-Optionally you can set a timer for how long sleep prior to posting an issue to chat again.  This is accomplished by setting an expiring key in Redis. That timeout is govered by the `config.handlers.jira_issues.key_expiration` config.  The default is 0 seconds which equates to disabled.
+Optionally you can set a timer for how long sleep prior to posting an issue to chat again.  This is accomplished by setting an expiring key in Redis. That timeout is govered by the following config
+
+```ruby
+config.handlers.jira_issues.issue_ttl=120
+```
+
+The default for this config is 0 which serves to disables the feature entirely.
 
 ## Usage
 
