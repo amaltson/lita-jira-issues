@@ -9,6 +9,7 @@ module Lita
       config :username, required: true, type: String
       config :password, required: true, type: String
       config :ignore, default: [], type: Array
+      config :key_expiration, default: 120, type: Integer
 
       route /[a-zA-Z]+-\d+/, :jira_message, help: {
         "KEY-123" => "Replies with information about the given JIRA key"
@@ -25,6 +26,16 @@ module Lita
       def handle_key(response, key)
         data = @jira.data_for_issue(key)
         return if data.empty?
+        unless config.key_expiration == 0
+          current_ttl = redis.ttl(key).to_i
+          if current_ttl > 0
+            log.debug("Key expiration not met for #{key}, will not reprompt for #{current_ttl} seconds")
+            return
+          else
+            redis.setex(key, config.key_expiration, key)
+            log.debug("Setting expiring key in redis for JIRA issue: #{key}. Key is configured to expire in #{config.key_expiration} seconds")
+          end
+        end
         issue = issue_details(data)
         response.reply issue
       end
