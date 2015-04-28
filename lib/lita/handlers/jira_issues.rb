@@ -26,16 +26,7 @@ module Lita
       def handle_key(response, key)
         data = @jira.data_for_issue(key)
         return if data.empty?
-        unless config.issue_ttl == 0
-          current_ttl = redis.ttl(key).to_i
-          if current_ttl > 0
-            log.debug("Key expiration not met for #{key}, will not reprompt for #{current_ttl} seconds")
-            return
-          else
-            redis.setex(key, config.issue_ttl, key)
-            log.debug("Setting expiring key in redis for JIRA issue: #{key}. Key is configured to expire in #{config.issue_ttl} seconds")
-          end
-        end
+        return if silenced?(key)
         issue = issue_details(data)
         response.reply issue
       end
@@ -91,6 +82,26 @@ module Lita
       def issue_link(key)
         "\n#{config.url}/browse/#{key}"
       end
+
+      def silenced?(key)
+
+        if config.issue_ttl == 0
+          log.debug("JiraIssues: issue_ttl is set to 0, will post every matched issue to chat")
+          return false
+        end
+
+        current_ttl = redis.ttl(key).to_i
+
+        if current_ttl > 0
+          log.debug("JiraIssues: Key expiration not met for #{key}, will not reprompt for #{current_ttl} seconds")
+          true
+        else
+          redis.setex(key, config.issue_ttl, key)
+          log.debug("JiraIssues: Setting expiring key in redis for JIRA issue: #{key}. Key is configured to expire in #{config.issue_ttl} seconds")
+          false
+        end
+      end
+
     end
 
     Lita.register_handler(JiraIssues)

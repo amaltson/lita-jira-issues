@@ -7,7 +7,33 @@ describe Lita::Handlers::JiraIssues, lita_handler: true do
 
   describe 'Looking up keys' do
 
+    context 'Test silenced handler' do
+
+      let(:redis) { Redis::Namespace }
+
+      it 'should return false when issue ttl is set to 0, which is default' do
+        Lita.config.handlers.jira_issues.issue_ttl = 0
+        expect(Lita::Handlers::JiraIssues.new.silenced?("KEY-123")).to eql false
+      end
+
+      context 'configured ttl of 10 seconds' do
+        before(:each) { Lita.config.handlers.jira_issues.issue_ttl = 10 }
+
+        it 'should return true with redis ttl is 10' do
+          allow_any_instance_of(redis).to receive(:ttl).with('KEY-424').and_return("10")
+          expect(Lita::Handlers::JiraIssues.new.silenced?("KEY-424")).to eql true
+        end
+
+        it 'should return true for silenced when redis ttl is -2' do
+          allow_any_instance_of(redis).to receive(:ttl).with('KEY-424').and_return("-2")
+          expect(Lita::Handlers::JiraIssues.new.silenced?("KEY-424")).to eql false
+        end
+      end
+
+    end
+
     before(:each) do
+      Lita.test_mode = true
       Lita.config.handlers.jira_issues.url = 'http://jira.local'
       Lita.config.handlers.jira_issues.username = 'user'
       Lita.config.handlers.jira_issues.password = 'pass'
