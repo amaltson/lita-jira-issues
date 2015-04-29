@@ -43,7 +43,7 @@ configuration parameter
 config.handlers.jira_issues.ignore = [ 'Jira', 'Github' ]
 ```
 
-Optionally you can set a timer for how long sleep prior to posting an issue to chat again.  This is accomplished by setting an expiring key in Redis. That timeout is govered by the following config
+Optionally you can set a timer for how long to sleep prior to posting an issue to chat again.  This is accomplished by setting an expiring key in Redis. That timeout is governed by the following config
 
 ```ruby
 config.handlers.jira_issues.issue_ttl = 120
