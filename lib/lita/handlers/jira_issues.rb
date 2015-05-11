@@ -10,6 +10,8 @@ module Lita
       config :password, required: true, type: String
       config :ignore, default: [], type: Array
       config :issue_ttl, default: 0, type: Integer
+      config :format, default: "[%I] %t\nStatus: %s, assigned to %a, rep. by %r, fixVersion: %v, priority: %P\n%U", type: String
+      
 
       route /[a-zA-Z]+-\d+/, :jira_message, help: {
         "KEY-123" => "Replies with information about the given JIRA key"
@@ -34,53 +36,62 @@ module Lita
       def issue_details(data)
         key = data[:key]
         data = data[:fields]
-        issue = summary(key, data)
-        issue << status(data)
-        issue << assignee(data)
-        issue << reporter(data)
-        issue << fix_version(data)
-        issue << priority(data)
-        issue << issue_link(key)
-      end
-
-      def summary(key, data)
-        "[#{key}] #{data[:summary]}"
+        
+        # build out the response from the configured format
+        text = config.format
+        text.sub!('%I', key.upcase)
+        text.sub!('%i', key.downcase)
+        text.sub!('%S', status(data).upcase)
+        text.sub!('%s', status(data))
+        text.sub!('%t', summary(data))
+        text.sub!('%a', assignee(data))
+        text.sub!('%r', reporter(data))
+        text.sub!('%v', fix_version(data))
+        text.sub!('%P', priority(data).upcase)
+        text.sub!('%p', priority(data).downcase)
+        text.sub!('%U', issue_link(key))
+        
+        return text
       end
 
       def status(data)
-        "\nStatus: #{data[:status][:name]}"
+        data[:status][:name]
       end
 
+      def summary(data)
+        data[:summary]
+      end
+      
       def assignee(data)
         if assigned_to = data[:assignee]
-          return ", assigned to #{assigned_to[:displayName]}"
+          return assigned_to[:displayName]
         end
-        ', unassigned'
+        'unassigned'
       end
 
       def reporter(data)
-        ", rep. by #{data[:reporter][:displayName]}"
+        data[:reporter][:displayName]
       end
 
       def fix_version(data)
         fix_versions = data[:fixVersions]
         if fix_versions and fix_versions.first
-          ", fixVersion: #{fix_versions.first[:name]}"
+          fix_versions.first[:name]
         else
-          ', fixVersion: NONE'
+          'NONE'
         end
       end
 
       def priority(data)
         if data[:priority]
-          ", priority: #{data[:priority][:name]}"
+          data[:priority][:name]
         else
           ""
         end
       end
 
       def issue_link(key)
-        "\n#{config.url}/browse/#{key}"
+        "#{config.url}/browse/#{key}"
       end
 
       def silenced?(key)

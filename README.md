@@ -31,6 +31,7 @@ config.handlers.jira_issues.url = 'http://jira.local'
 config.handlers.jira_issues.username = ENV['JIRA_USER'] || 'user'
 config.handlers.jira_issues.password = ENV['JIRA_PASSWORD'] || 'password'
 config.handlers.jira_issues.issue_ttl = 0 #optional
+config.handlers.jira_issues.format = '[%I] %S::%s'  #optional
 ```
 
 As in the example above, you can always use environment variables for sensitive
@@ -50,6 +51,29 @@ config.handlers.jira_issues.issue_ttl = 120
 ```
 
 The default for this config is 0 which serves to disables the feature entirely.
+
+You can now change the displayed format. Using the following table of patterns, one can now set the format configuration setting to a string that will be displayed when a JIRA ticket is referenced. By default the format is set to the original text displayed by the lita-jira-issues module. 
+
+```
+[%I] %t
+Status: %s, assigned to %a, rep. by %r, fixVersion: %v, priority: %P
+%U
+```
+
+
+Pattern | Substitution
+--------|-------------
+%I      | Issue number (uppercase)
+%i      | Issue number (lowercase)
+%S      | Issue status (uppercase)
+%s      | Issue status (lowercase)
+%t      | Issue summary
+%a      | Assignee
+%r      | Reporter
+%v      | Version
+%P      | Priority (uppercase)
+%p      | Priority (lowercase)
+%U      | URL to JIRA issue page
 
 ## Usage
 
