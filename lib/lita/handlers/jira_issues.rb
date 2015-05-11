@@ -38,7 +38,7 @@ module Lita
         data = data[:fields]
         
         # build out the response from the configured format
-        text = config.format
+        text = String.new(config.format)
         text.sub!('%I', key.upcase)
         text.sub!('%i', key.downcase)
         text.sub!('%S', status(data).upcase)
