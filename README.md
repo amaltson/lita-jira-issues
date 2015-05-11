@@ -31,7 +31,7 @@ config.handlers.jira_issues.url = 'http://jira.local'
 config.handlers.jira_issues.username = ENV['JIRA_USER'] || 'user'
 config.handlers.jira_issues.password = ENV['JIRA_PASSWORD'] || 'password'
 config.handlers.jira_issues.issue_ttl = 0 #optional
-config.handlers.jira_issues.format = '[%I] %S::%s'  #optional
+config.handlers.jira_issues.format = '[%I] %S::%t'  #optional
 ```
 
 As in the example above, you can always use environment variables for sensitive
