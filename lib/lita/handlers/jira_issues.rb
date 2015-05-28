@@ -16,7 +16,7 @@ FORMATTER
       config :password, required: true, type: String
       config :ignore, default: [], type: Array
       config :issue_ttl, default: 0, type: Integer
-      config :format, default: FORMAT, type: String
+      config :format, default: FORMAT.chomp, type: String
       
 
       route /[a-zA-Z]+-\d+/, :jira_message, help: {
