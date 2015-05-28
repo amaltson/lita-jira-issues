@@ -7,7 +7,7 @@ module Lita
 
       FORMAT = <<-FORMATTER
 [%{KEY}] %{summary}
-Status: %{status}, assigned to %{assignee}, rep. by %{reporter}, fixVersion: %{version}, priority: %{priority}
+Status: %{status}, #(%{assignee}?assigned to %{assignee}|unassigned), rep. by %{reporter}, fixVersion: %{version}#(%{priority}?, priority: %{priority}|)
 %{link}
 FORMATTER
 
@@ -56,6 +56,16 @@ FORMATTER
           URL: issue_link(key), url: issue_link(key)
         }
         
+        # evaluate conditional syntax
+        text.gsub!(/#\(.*?\?.*?\|.*?\)/) do |cond_stmt|
+          vals = cond_stmt.match(/#\((?<value>.*?)\?(?<true_text>.*?)\|(?<false_text>.*?)\)/)
+          if vals[:value].empty?
+            vals[:false_text].gsub("\|", "|").gsub("\?", "?")
+          else
+            vals[:true_text].gsub("\|", "|").gsub("\?", "?")
+          end
+        end
+        
         return text
       end
 
@@ -71,7 +81,7 @@ FORMATTER
         if assigned_to = data[:assignee]
           return assigned_to[:displayName]
         end
-        'unassigned'
+        ''
       end
 
       def reporter(data)
