@@ -52,28 +52,29 @@ config.handlers.jira_issues.issue_ttl = 120
 
 The default for this config is 0 which serves to disables the feature entirely.
 
-You can now change the displayed format. Using the following table of patterns, one can now set the format configuration setting to a string that will be displayed when a JIRA ticket is referenced. By default the format is set to the original text displayed by the lita-jira-issues module. 
+You can now change the displayed format using keyword expansion. The following table of keywords can be used to create the response when a JIRA ticket is referenced. Each keyword needs to be enclosed in %{} just as the Ruby `%` operator requires.  
+
+Each keyword can take one of 3 forms. If the keyword is specified in all CAPS, then the resulting text will be in all caps (i.e. 'KEY' => 'ABC-123'). If the keyword has an initial capital letter, then resulting text will be proper case (i.e. 'Key' => 'Abc-123'). Finally if the keyword is all lower case, then the resulting text will be the native format that the text was received in. 
+
+By default the format is set to the original text displayed by the lita-jira-issues module. 
 
 ```
-[%I] %t
-Status: %s, assigned to %a, rep. by %r, fixVersion: %v, priority: %P
-%U
+[%{KEY}] %{summary}
+Status: %{status}, assigned to %{assignee}, rep. by %{reporter}, fixVersion: %{version}, priority: %{priority}
+%{link}
 ```
 
 
-Pattern | Substitution
---------|-------------
-%I      | Issue number (uppercase)
-%i      | Issue number (lowercase)
-%S      | Issue status (uppercase)
-%s      | Issue status (lowercase)
-%t      | Issue summary
-%a      | Assignee
-%r      | Reporter
-%v      | Version
-%P      | Priority (uppercase)
-%p      | Priority (lowercase)
-%U      | URL to JIRA issue page
+Pattern  | Substitution
+---------|-------------
+key      | Issue number 
+status   | Issue status
+summary  | Issue summary
+assignee | Assignee
+reporter | Reporter
+version  | Version
+priority | Priority
+link     | URL to JIRA issue page
 
 ## Usage
 

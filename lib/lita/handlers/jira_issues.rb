@@ -5,12 +5,18 @@ module Lita
   module Handlers
     class JiraIssues < Handler
 
+      FORMAT = <<-FORMATTER
+      [%{KEY}] %{summary}
+      Status: %{status}, assigned to %{assignee}, rep. by %{reporter}, fixVersion: %{version}, priority: %{priority}
+      %{link}
+      FORMATTER
+
       config :url, required: true, type: String
       config :username, required: true, type: String
       config :password, required: true, type: String
       config :ignore, default: [], type: Array
       config :issue_ttl, default: 0, type: Integer
-      config :format, default: "[%I] %t\nStatus: %s, assigned to %a, rep. by %r, fixVersion: %v, priority: %P\n%U", type: String
+      config :format, default: FORMAT, type: String
       
 
       route /[a-zA-Z]+-\d+/, :jira_message, help: {
@@ -38,18 +44,16 @@ module Lita
         data = data[:fields]
         
         # build out the response from the configured format
-        text = String.new(config.format)
-        text.sub!('%I', key.upcase)
-        text.sub!('%i', key.downcase)
-        text.sub!('%S', status(data).upcase)
-        text.sub!('%s', status(data))
-        text.sub!('%t', summary(data))
-        text.sub!('%a', assignee(data))
-        text.sub!('%r', reporter(data))
-        text.sub!('%v', fix_version(data))
-        text.sub!('%P', priority(data).upcase)
-        text.sub!('%p', priority(data).downcase)
-        text.sub!('%U', issue_link(key))
+        text = config.format % {
+          KEY: key.upcase, Key: key.capitalize, key: key,
+          SUMMARY: summary(data).upcase, Summary: summary(data).capitalize, summary: summary(data),
+          ASSIGNEE: assignee(data).upcase, Assignee: assignee(data).capitalize, assignee: assignee(data),
+          REPORTER: reporter(data).upcase, Reporter: reporter(data).capitalize, reporter: reporter(data),
+          STATUS: status(data).upcase, Status: status(data).capitalize, status: status(data),
+          PRIORITY: priority(data).upcase, Priority: priority(data).capitalize, priority: priority(data),
+          VERSION: fix_version(data).upcase, Version: fix_version(data).capitalize, version: fix_version(data),
+          LINK: issue_link(key), link: issue_link(key) 
+        }
         
         return text
       end
