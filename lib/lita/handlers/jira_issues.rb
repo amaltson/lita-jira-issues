@@ -6,10 +6,10 @@ module Lita
     class JiraIssues < Handler
 
       FORMAT = <<-FORMATTER
-      [%{KEY}] %{summary}
-      Status: %{status}, assigned to %{assignee}, rep. by %{reporter}, fixVersion: %{version}, priority: %{priority}
-      %{link}
-      FORMATTER
+[%{KEY}] %{summary}
+Status: %{status}, assigned to %{assignee}, rep. by %{reporter}, fixVersion: %{version}, priority: %{priority}
+%{link}
+FORMATTER
 
       config :url, required: true, type: String
       config :username, required: true, type: String
