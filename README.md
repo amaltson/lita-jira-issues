@@ -64,6 +64,11 @@ Status: %{status}, assigned to %{assignee}, rep. by %{reporter}, fixVersion: %{v
 %{link}
 ```
 
+The response to referenced JIRA tickets are left up to you, but shortened formats are now available like:
+
+```
+[%{KEY}] %{PRIORITY}/%{Summary} - %{STATUS}\n%{link}
+```
 
 Pattern  | Substitution
 ---------|-------------
@@ -75,6 +80,7 @@ reporter | Reporter
 version  | Version
 priority | Priority
 link     | URL to JIRA issue page
+url      | Same as %{link}
 
 ## Usage
 
