@@ -52,7 +52,8 @@ module Lita
           STATUS: status(data).upcase, Status: status(data).capitalize, status: status(data),
           PRIORITY: priority(data).upcase, Priority: priority(data).capitalize, priority: priority(data),
           VERSION: fix_version(data).upcase, Version: fix_version(data).capitalize, version: fix_version(data),
-          LINK: issue_link(key), link: issue_link(key) 
+          LINK: issue_link(key), link: issue_link(key),
+          URL: issue_link(key), url: issue_link(key)
         }
         
         return text
