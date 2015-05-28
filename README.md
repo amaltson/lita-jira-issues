@@ -68,7 +68,7 @@ By default the format is set to the original text displayed by the lita-jira-iss
 
 ```
 [%{KEY}] %{summary}
-Status: %{status}, #(%{assignee}?assigned to %{assignee}|unassigned), rep. by %{reporter}, fixVersion: %{version}#(%{priority}?, priority: %{priority}|)
+Status: %{status}, #(%{assignee}?assigned to %{assignee}|unassigned), rep. by %{reporter}, fixVersion: #(%{version}?%{version}|NONE)#(%{priority}?, priority: %{priority}|)
 %{link}
 ```
 

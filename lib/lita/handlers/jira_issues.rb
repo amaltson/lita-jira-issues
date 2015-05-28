@@ -7,7 +7,7 @@ module Lita
 
       FORMAT = <<-FORMATTER
 [%{KEY}] %{summary}
-Status: %{status}, #(%{assignee}?assigned to %{assignee}|unassigned), rep. by %{reporter}, fixVersion: %{version}#(%{priority}?, priority: %{priority}|)
+Status: %{status}, #(%{assignee}?assigned to %{assignee}|unassigned), rep. by %{reporter}, fixVersion: #(%{version}?%{version}|NONE)#(%{priority}?, priority: %{priority}|)
 %{link}
 FORMATTER
 
@@ -93,7 +93,7 @@ FORMATTER
         if fix_versions and fix_versions.first
           fix_versions.first[:name]
         else
-          'NONE'
+          ''
         end
       end
 
@@ -101,7 +101,7 @@ FORMATTER
         if data[:priority]
           data[:priority][:name]
         else
-          ""
+          ''
         end
       end
 
