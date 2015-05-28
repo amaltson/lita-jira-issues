@@ -71,13 +71,13 @@ http://jira.local/browse/KEY-424
       send_message('Some PROJ-9872 message nEw-1 more text')
       expect(replies.pop).to eq(<<-EOS.chomp
 [NEW-1] New 1
-Status: Open, unassigned, rep. by User2, fixVersion: NONE, priority: High
+Status: Open, assigned to unassigned, rep. by User2, fixVersion: NONE, priority: High
 http://jira.local/browse/NEW-1
                                 EOS
                                )
       expect(replies.pop).to eq(<<-EOS.chomp
 [PROJ-9872] Too many bugs
-Status: Resolved, unassigned, rep. by User, fixVersion: NONE
+Status: Resolved, assigned to unassigned, rep. by User, fixVersion: NONE, priority: 
 http://jira.local/browse/PROJ-9872
                                 EOS
                                )
