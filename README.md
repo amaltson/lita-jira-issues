@@ -52,19 +52,19 @@ config.handlers.jira_issues.issue_ttl = 120
 
 The default for this config is 0 which serves to disables the feature entirely.
 
-You can now change the displayed format using keyword expansion. The following table of keywords can be used to create the response when a JIRA ticket is referenced. Each keyword needs to be enclosed in %{} just as the Ruby `%` operator requires.  
+You can now change the displayed format using keyword expansion. The following table of keywords can be used to create the response when a JIRA ticket is referenced. Each keyword needs to be enclosed in %{} just as the Ruby `%` operator requires.
 
-Each keyword can take one of 3 forms. If the keyword is specified in all CAPS, then the resulting text will be in all caps (i.e. 'KEY' => 'ABC-123'). If the keyword has an initial capital letter, then resulting text will be proper case (i.e. 'Key' => 'Abc-123'). Finally if the keyword is all lower case, then the resulting text will be the native format that the text was received in. 
+Each keyword can take one of 3 forms. If the keyword is specified in all CAPS, then the resulting text will be in all caps (i.e. 'KEY' => 'ABC-123'). If the keyword has an initial capital letter, then resulting text will be proper case (i.e. 'Key' => 'Abc-123'). Finally if the keyword is all lower case, then the resulting text will be the native format that the text was received in.
 
-There is also a conditional syntax that can be use should the keyword not return a value. The conditional syntax roughly approximates a ternary operator found in several programming languages such as C, Java and Perl with slight modificaiton to make pattern matching easier.
+There is also a conditional syntax that can be use should the keyword not return a value. The conditional syntax roughly approximates a ternary operator found in several programming languages such as C, Java and Perl with slight modification to make pattern matching easier.
 
 ```
 #(%{assignee}?Assigned to %{assignee}|UNASSIGNED)
 ```
 
-In the above example, the start of the conditional syntax starts with the `#(` and is completed with the closing `)`. The first part (what is preceding the question mark) is what is evaluated. If the evaluation is not an empty string (i.e. ''), then the conditional syntax is replaced with the text between the question and the pipe (`|`) symbol. If the evaluation does return an empty string (i.e. assignee is not set), then the text following the pipe symbol will replace the conditional syntax. As one would expect, keyword substitutions occur within the conditional syntax. 
+In the above example, the start of the conditional syntax starts with the `#(` and is completed with the closing `)`. The first part (what is preceding the question mark) is what is evaluated. If the evaluation is not an empty string (i.e. ''), then the conditional syntax is replaced with the text between the question and the pipe (`|`) symbol. If the evaluation does return an empty string (i.e. assignee is not set), then the text following the pipe symbol will replace the conditional syntax. As one would expect, keyword substitutions occur within the conditional syntax.
 
-By default the format is set to the original text displayed by the lita-jira-issues module. 
+By default the format is set to the original text displayed by the lita-jira-issues module.
 
 ```
 [%{KEY}] %{summary}
@@ -80,7 +80,7 @@ The response to referenced JIRA tickets are left up to you, but shortened format
 
 Pattern  | Substitution
 ---------|-------------
-key      | Issue number 
+key      | Issue number
 status   | Issue status
 summary  | Issue summary
 assignee | Assignee
