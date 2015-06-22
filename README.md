@@ -23,6 +23,8 @@ gem "lita-jira-issues"
 
 ## Configuration
 
+### Base Configuration
+
 The `jira_issues` handler needs to be configured with your JIRA instance. Add
 the following configurations to your `lita_config.rb`.
 
@@ -37,12 +39,16 @@ config.handlers.jira_issues.format = '[%I] %S::%t'  #optional
 As in the example above, you can always use environment variables for sensitive
 information like the JIRA user's password.
 
+### Ignoring Users
+
 Optionally you can prevent JIRA issue lookups from certain users using the ignore
 configuration parameter
 
 ```ruby
 config.handlers.jira_issues.ignore = [ 'Jira', 'Github' ]
 ```
+
+### Avoid A Spamming Bot
 
 Optionally you can set a timer for how long to sleep prior to posting an issue to chat again.  This is accomplished by setting an expiring key in Redis. That timeout is governed by the following config
 
@@ -52,7 +58,9 @@ config.handlers.jira_issues.issue_ttl = 120
 
 The default for this config is 0 which serves to disables the feature entirely.
 
-You can now change the displayed format using keyword expansion. The following table of keywords can be used to create the response when a JIRA ticket is referenced. Each keyword needs to be enclosed in %{} just as the Ruby `%` operator requires.
+### Customize Output
+
+You can now change the displayed format using keyword expansion. The following table of keywords can be used to create the response when a JIRA issue is referenced. Each keyword needs to be enclosed in %{} just as the Ruby `%` operator requires.
 
 Each keyword can take one of 3 forms. If the keyword is specified in all CAPS, then the resulting text will be in all caps (i.e. 'KEY' => 'ABC-123'). If the keyword has an initial capital letter, then resulting text will be proper case (i.e. 'Key' => 'Abc-123'). Finally if the keyword is all lower case, then the resulting text will be the native format that the text was received in.
 
