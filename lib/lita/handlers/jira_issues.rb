@@ -5,11 +5,19 @@ module Lita
   module Handlers
     class JiraIssues < Handler
 
+      FORMAT = <<-FORMATTER
+[%{KEY}] %{summary}
+Status: %{status}, #(%{assignee}?assigned to %{assignee}|unassigned), rep. by %{reporter}, fixVersion: #(%{version}?%{version}|NONE)#(%{priority}?, priority: %{priority}|)
+%{link}
+FORMATTER
+
       config :url, required: true, type: String
       config :username, required: true, type: String
       config :password, required: true, type: String
       config :ignore, default: [], type: Array
       config :issue_ttl, default: 0, type: Integer
+      config :format, default: FORMAT.chomp, type: String
+      
 
       route /[a-zA-Z]+-\d+/, :jira_message, help: {
         "KEY-123" => "Replies with information about the given JIRA key"
@@ -34,53 +42,71 @@ module Lita
       def issue_details(data)
         key = data[:key]
         data = data[:fields]
-        issue = summary(key, data)
-        issue << status(data)
-        issue << assignee(data)
-        issue << reporter(data)
-        issue << fix_version(data)
-        issue << priority(data)
-        issue << issue_link(key)
-      end
-
-      def summary(key, data)
-        "[#{key}] #{data[:summary]}"
+        
+        # build out the response from the configured format
+        text = config.format % {
+          KEY: key.upcase, Key: key.capitalize, key: key,
+          SUMMARY: summary(data).upcase, Summary: summary(data).capitalize, summary: summary(data),
+          ASSIGNEE: assignee(data).upcase, Assignee: assignee(data).capitalize, assignee: assignee(data),
+          REPORTER: reporter(data).upcase, Reporter: reporter(data).capitalize, reporter: reporter(data),
+          STATUS: status(data).upcase, Status: status(data).capitalize, status: status(data),
+          PRIORITY: priority(data).upcase, Priority: priority(data).capitalize, priority: priority(data),
+          VERSION: fix_version(data).upcase, Version: fix_version(data).capitalize, version: fix_version(data),
+          LINK: issue_link(key), link: issue_link(key),
+          URL: issue_link(key), url: issue_link(key)
+        }
+        
+        # evaluate conditional syntax
+        text.gsub!(/#\(.*?\?.*?\|.*?\)/) do |cond_stmt|
+          vals = cond_stmt.match(/#\((?<value>.*?)\?(?<true_text>.*?)\|(?<false_text>.*?)\)/)
+          if vals[:value].empty?
+            vals[:false_text].gsub("\|", "|").gsub("\?", "?")
+          else
+            vals[:true_text].gsub("\|", "|").gsub("\?", "?")
+          end
+        end
+        
+        return text
       end
 
       def status(data)
-        "\nStatus: #{data[:status][:name]}"
+        data[:status][:name]
       end
 
+      def summary(data)
+        data[:summary]
+      end
+      
       def assignee(data)
         if assigned_to = data[:assignee]
-          return ", assigned to #{assigned_to[:displayName]}"
+          return assigned_to[:displayName]
         end
-        ', unassigned'
+        ''
       end
 
       def reporter(data)
-        ", rep. by #{data[:reporter][:displayName]}"
+        data[:reporter][:displayName]
       end
 
       def fix_version(data)
         fix_versions = data[:fixVersions]
         if fix_versions and fix_versions.first
-          ", fixVersion: #{fix_versions.first[:name]}"
+          fix_versions.first[:name]
         else
-          ', fixVersion: NONE'
+          ''
         end
       end
 
       def priority(data)
         if data[:priority]
-          ", priority: #{data[:priority][:name]}"
+          data[:priority][:name]
         else
-          ""
+          ''
         end
       end
 
       def issue_link(key)
-        "\n#{config.url}/browse/#{key}"
+        "#{config.url}/browse/#{key}"
       end
 
       def silenced?(key)
